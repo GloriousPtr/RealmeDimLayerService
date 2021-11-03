@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Purpose: BootCompleteReciever bootstrap class, allows DimLayerDisablerService
- * class to hook in and start the required listeners.
+ * Purpose: DimLayerDisablerService class, starts the required listeners.
  * 
  */
 
@@ -24,19 +23,29 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
 public class DimLayerDisablerService extends Service {
-    private KeyguardHelper keyguardHelper;
-
     private static final String TAG = "RealmeDimLayerDisablerHelperService";
     private static final boolean DEBUG = true;
 
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                if (DEBUG) Log.d(TAG, "Device Unlocked");
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
-       if (DEBUG) Log.d(TAG, "Creating callback for KeyguardHelper");
-        keyguardHelper = new KeyguardHelper();
+       if (DEBUG) Log.d(TAG, "Creating callback for DimLayerDisablerService");
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        registerReceiver(mIntentReceiver, filter);
     }
 
     @Override
@@ -46,7 +55,8 @@ public class DimLayerDisablerService extends Service {
 
     @Override
     public void onDestroy() {
-       if (DEBUG) Log.d(TAG, "Destroying DimLayerDisablerService service");
+        if (DEBUG) Log.d(TAG, "Destroying DimLayerDisablerService service");
+        unregisterReceiver(mIntentReceiver);
         super.onDestroy();
     }
 
