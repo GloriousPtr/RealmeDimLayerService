@@ -30,12 +30,16 @@ import android.util.Log;
 public class DimLayerDisablerService extends Service {
     private static final String TAG = "RealmeDimLayerDisablerHelperService";
     private static final boolean DEBUG = true;
+    private static final String STATUS = "/sys/kernel/oppo_display/dimlayer_hbm";
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 if (DEBUG) Log.d(TAG, "Device Unlocked");
+
+                if (FileHelper.getFileValue(STATUS, "1") != "0")
+                    FileHelper.writeValue(STATUS, "0");
             }
         }
     };
