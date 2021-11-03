@@ -18,23 +18,28 @@
  * 
  */
 
- package co.hyper.dimlayerdisablerservice;
+package co.hyper.dimlayerdisablerservice;
 
 import android.app.KeyguardManager;
+import android.util.Log;
 
 public class KeyguardHelper extends KeyguardManager.KeyguardDismissCallback {
+    private static final String TAG = "RealmeDimLayerDisablerKeyguardHelper";
     @Override
     public void onDismissSucceeded() {
+        Log.d(TAG, "onDismissSucceeded");
         super.onDismissSucceeded();
     }
 
     @Override
     public void onDismissError() {
+        Log.d(TAG, "onDismissError");
         super.onDismissError();
     }
 
     @Override
     public void onDismissCancelled() {
+        Log.d(TAG, "onDismissCancelled");
         super.onDismissCancelled();
     }
 }

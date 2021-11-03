@@ -50,7 +50,6 @@ public class DimLayerDisablerService extends Service {
         super.onDestroy();
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
